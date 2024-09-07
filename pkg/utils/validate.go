@@ -1,8 +1,8 @@
 package utils
 
 import (
-	"food-delivery/internal/dto"
 	"github.com/go-playground/validator/v10"
+	"task-management/internal/dto"
 )
 
 var validate = validator.New()
