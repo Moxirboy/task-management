@@ -3,8 +3,10 @@ package postgres
 import (
 	"context"
 	"database/sql"
-	"food-delivery/pkg/logger"
 	"github.com/pkg/errors"
+	"task-management/internal/dto"
+	"task-management/internal/service/storage/repo"
+	"task-management/pkg/logger"
 	"time"
 )
 
