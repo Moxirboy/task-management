@@ -4,8 +4,8 @@ import (
 	"database/sql"
 	"errors"
 	"net/http"
+	"task-management/internal/dto"
 
-	"food-delivery/internal/dto"
 	"github.com/gin-gonic/gin"
 )
 
@@ -23,8 +23,8 @@ const (
 )
 
 var (
-	ErrInvalidField = errors.New("invelid field")
-	ErrAlreadyExist = errors.New("already exist")
+	ErrInvalidField     = errors.New("invelid field")
+	ErrAlreadyExist     = errors.New("already exist")
 	ErrNotAuthenticated = errors.New("not authenticated")
 )
 
