@@ -19,14 +19,13 @@ type Config struct {
 	AppName    string `env:"APP_NAME"`
 	AppVersion string `env:"APP_VERSION"`
 
-	Server    Server
-	Logger    Logger
-	Postgres  Postgres
-	JWT       JWT
-	Setup     Setup
-	Redis     Redis
-	Casbin    Casbin
-	FireStore FireStore
+	Server   Server
+	Logger   Logger
+	Postgres Postgres
+	JWT      JWT
+	Setup    Setup
+	Redis    Redis
+	Casbin   Casbin
 }
 
 type (

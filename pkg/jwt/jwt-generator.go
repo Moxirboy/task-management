@@ -5,8 +5,6 @@ import (
 
 	"crypto/rand"
 	"fmt"
-	"food-delivery/internal/configs"
-	"food-delivery/internal/models"
 	"github.com/gbrlsnchs/jwt/v3"
 	"github.com/pkg/errors"
 	"strings"

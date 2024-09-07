@@ -1,0 +1,555 @@
+basePath: /api/v1
+definitions:
+  dto.BaseResponse:
+    properties:
+      data: {}
+      invalidParams: {}
+      message:
+        type: string
+      status:
+        type: string
+    type: object
+  dto.CartRequest:
+    properties:
+      product_id:
+        type: string
+      quantity:
+        type: integer
+    type: object
+  dto.LoginRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
+  dto.OrderResponse:
+    properties:
+      cart_id:
+        type: string
+      id:
+        type: string
+      status:
+        type: string
+    type: object
+  dto.OrderStatus:
+    properties:
+      status:
+        type: string
+    type: object
+  dto.RenewRequest:
+    properties:
+      refresh_token:
+        type: string
+    type: object
+  dto.SignUpRequest:
+    properties:
+      email:
+        type: string
+      first_name:
+        type: string
+      last_name:
+        type: string
+      password:
+        type: string
+    type: object
+host: food-delivery.up.railway.app
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: This is a server for the food delivery service.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Food Delivery API
+  version: "1.0"
+paths:
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Authenticates a user and generates access and refresh tokens.
+      parameters:
+      - description: Login credentials
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/dto.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Login successful
+          schema:
+            $ref: '#/definitions/dto.BaseResponse'
+        "400":
+          description: Invalid login request
+          schema:
+            $ref: '#/definitions/dto.BaseResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/dto.BaseResponse'
+      summary: User login
+      tags:
+      - auth
+  /auth/refresh:
+    post:
+      consumes:
+      - application/json
+      description: Refreshes the access token using a refresh token.
+      parameters:
+      - description: Refresh Token
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/dto.RenewRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Token refreshed successfully
+          schema:
+            $ref: '#/definitions/dto.BaseResponse'
+        "400":
+          description: Invalid request
+          schema:
+            $ref: '#/definitions/dto.BaseResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/dto.BaseResponse'
+      summary: Refresh access token
+      tags:
+      - auth
+  /auth/set:
+    get:
+      consumes:
+      - application/json
+      description: Sets the Authorization header with a Bearer token.
+      parameters:
+      - description: Authorization Token
+        in: query
+        name: token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Set Authorization Header
+      tags:
+      - Auth
+  /auth/sign:
+    post:
+      consumes:
+      - application/json
+      description: Registers a new user and generates access and refresh tokens.
+      parameters:
+      - description: User sign-up details
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/dto.SignUpRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Sign-up successful
+          schema:
+            $ref: '#/definitions/dto.BaseResponse'
+        "400":
+          description: Invalid sign-up request
+          schema:
+            $ref: '#/definitions/dto.BaseResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/dto.BaseResponse'
+      summary: User sign up
+      tags:
+      - auth
+  /cart/add:
+    post:
+      consumes:
+      - application/json
+      description: Adds a specified product to the user's cart.
+      parameters:
+      - description: Product details
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CartRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Product added successfully
+          schema:
+            $ref: '#/definitions/dto.BaseResponse'
+        "400":
+          description: Invalid request
+          schema:
+            $ref: '#/definitions/dto.BaseResponse'
+        "401":
+          description: User not authenticated
+          schema:
+            $ref: '#/definitions/dto.BaseResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/dto.BaseResponse'
+      security:
+      - Bearer: []
+      summary: Add a product to the cart
+      tags:
+      - cart
+  /cart/create:
+    post:
+      consumes:
+      - application/json
+      description: Creates a new cart for the authenticated user.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Cart created successfully
+          schema:
+            $ref: '#/definitions/dto.BaseResponse'
+        "401":
+          description: User not authenticated
+          schema:
+            $ref: '#/definitions/dto.BaseResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/dto.BaseResponse'
+      security:
+      - Bearer: []
+      summary: Create a new cart
+      tags:
+      - cart
+  /cart/get:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves the cart for the authenticated user.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Cart retrieved successfully
+          schema:
+            $ref: '#/definitions/dto.BaseResponse'
+        "401":
+          description: User not authenticated
+          schema:
+            $ref: '#/definitions/dto.BaseResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/dto.BaseResponse'
+      security:
+      - Bearer: []
+      summary: Get the cart
+      tags:
+      - cart
+  /cart/remove:
+    delete:
+      consumes:
+      - application/json
+      description: Removes or updates the quantity of a specified product in the user's
+        cart.
+      parameters:
+      - description: Product details
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CartRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Product removed or quantity updated successfully
+          schema:
+            $ref: '#/definitions/dto.BaseResponse'
+        "400":
+          description: Invalid request
+          schema:
+            $ref: '#/definitions/dto.BaseResponse'
+        "401":
+          description: User not authenticated
+          schema:
+            $ref: '#/definitions/dto.BaseResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/dto.BaseResponse'
+      security:
+      - Bearer: []
+      summary: Remove a product from the cart
+      tags:
+      - cart
+  /order/create:
+    post:
+      consumes:
+      - application/json
+      description: Creates a new order based on the user's cart.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Order created successfully
+          schema:
+            $ref: '#/definitions/dto.BaseResponse'
+        "400":
+          description: Invalid request
+          schema:
+            $ref: '#/definitions/dto.BaseResponse'
+        "401":
+          description: User not authenticated
+          schema:
+            $ref: '#/definitions/dto.BaseResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/dto.BaseResponse'
+      security:
+      - Bearer: []
+      summary: Create an order
+      tags:
+      - order
+  /order/get:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves a list of all orders.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of orders
+          schema:
+            items:
+              $ref: '#/definitions/dto.OrderResponse'
+            type: array
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/dto.BaseResponse'
+      security:
+      - Bearer: []
+      summary: Get all orders
+      tags:
+      - order
+  /order/update:
+    put:
+      consumes:
+      - application/json
+      description: Updates the status of an order based on the provided status.
+      parameters:
+      - description: User ID
+        in: header
+        name: ID
+        required: true
+        type: string
+      - description: Order Status
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/dto.OrderStatus'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Order status updated successfully
+          schema:
+            $ref: '#/definitions/dto.BaseResponse'
+        "400":
+          description: Invalid request
+          schema:
+            $ref: '#/definitions/dto.BaseResponse'
+        "401":
+          description: User not authenticated
+          schema:
+            $ref: '#/definitions/dto.BaseResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/dto.BaseResponse'
+      security:
+      - Bearer: []
+      summary: Update order status
+      tags:
+      - order
+  /product:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Uploads an image and creates a new product record.
+      parameters:
+      - description: Product image
+        in: formData
+        name: image
+        required: true
+        type: file
+      - description: Product name
+        in: formData
+        name: name
+        required: true
+        type: string
+      - description: Product description
+        in: formData
+        name: description
+        type: string
+      - description: Product price
+        in: formData
+        name: price
+        required: true
+        type: number
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Product created successfully
+          schema:
+            $ref: '#/definitions/dto.BaseResponse'
+        "400":
+          description: Invalid request
+          schema:
+            $ref: '#/definitions/dto.BaseResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/dto.BaseResponse'
+      security:
+      - Bearer: []
+      summary: Create a new product
+      tags:
+      - product
+  /product/get:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves a product by its unique ID.
+      parameters:
+      - description: Product ID
+        in: query
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Product retrieved successfully
+          schema:
+            $ref: '#/definitions/dto.BaseResponse'
+        "400":
+          description: Invalid request
+          schema:
+            $ref: '#/definitions/dto.BaseResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/dto.BaseResponse'
+      security:
+      - Bearer: []
+      summary: Get a product by ID
+      tags:
+      - product
+  /product/get-all:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves a list of products with optional pagination and filtering
+        by name.
+      parameters:
+      - description: Product name filter
+        in: query
+        name: name
+        type: string
+      - description: Page number
+        in: query
+        name: page
+        type: integer
+      - description: Page size
+        in: query
+        name: page_size
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of products
+          schema:
+            $ref: '#/definitions/dto.BaseResponse'
+        "400":
+          description: Invalid request
+          schema:
+            $ref: '#/definitions/dto.BaseResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/dto.BaseResponse'
+      security:
+      - Bearer: []
+      summary: Get a list of products
+      tags:
+      - product
+  /product/remove:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes a product by its unique ID.
+      parameters:
+      - description: Product ID
+        in: query
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Product deleted successfully
+          schema:
+            $ref: '#/definitions/dto.BaseResponse'
+        "400":
+          description: Invalid request
+          schema:
+            $ref: '#/definitions/dto.BaseResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/dto.BaseResponse'
+      security:
+      - Bearer: []
+      summary: Delete a product by ID
+      tags:
+      - product
+schemes:
+- http
+- https
+securityDefinitions:
+  Bearer:
+    description: security accessToken. Please add it in the format "AccessToken" to
+      authorize your requests.
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

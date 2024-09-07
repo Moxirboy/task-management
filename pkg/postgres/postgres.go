@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"sync"
 
-	"food-delivery/internal/configs"
+	"task-management/internal/configs"
 
 	_ "github.com/lib/pq" // pq for connection
 	"github.com/pkg/errors"
