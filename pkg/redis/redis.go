@@ -3,8 +3,8 @@ package redis
 import (
 	"context"
 	"fmt"
-	"food-delivery/internal/configs"
 	"sync"
+	"task-management/internal/configs"
 
 	"github.com/go-redis/redis/v8"
 	"github.com/pkg/errors"
